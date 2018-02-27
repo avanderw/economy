@@ -35,7 +35,7 @@ public abstract class AConsumer<I> extends AThread
                         consume(input.take());
                     } catch (InterruptedException ex)
                     {
-                        Logger.warn(ex);
+                        Logger.debug(ex);
                     }
                 });
             }

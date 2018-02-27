@@ -61,7 +61,7 @@ public abstract class AFactory<I extends AGood, O extends AGood> extends AThread
                     }
                 } catch (InterruptedException ex)
                 {
-                    Logger.warn(ex);
+                    Logger.debug(ex);
                 }
             });
         }

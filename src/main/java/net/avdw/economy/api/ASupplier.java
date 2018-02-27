@@ -33,7 +33,7 @@ public abstract class ASupplier<T> extends AThread
                 }
             } catch (InterruptedException ex)
             {
-                Logger.warn(ex);
+                Logger.debug(ex);
             }
         }
         Logger.debug(String.format("stopped"));
