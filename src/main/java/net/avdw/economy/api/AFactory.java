@@ -51,6 +51,10 @@ public abstract class AFactory<I extends AGood, O extends AGood> extends AThread
             {
                 try
                 {
+                    if (thread.isInterrupted())
+                    {
+                        throw new InterruptedException("interrupted before being handled");
+                    }
                     consume(input.take());
 
                     O good = produce();
