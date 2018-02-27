@@ -6,7 +6,7 @@ import java.util.List;
 import java.util.concurrent.BlockingQueue;
 import org.pmw.tinylog.Logger;
 
-public abstract class AFactory<I, O extends I> extends AThread
+public abstract class AFactory<I extends AGood, O extends AGood> extends AThread
 {
 
     private final List<BlockingQueue<I>> inputs;
