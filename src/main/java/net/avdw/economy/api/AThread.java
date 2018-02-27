@@ -17,6 +17,7 @@ abstract class AThread implements Runnable
     public void stop()
     {
         Logger.debug(String.format("stopping thread"));
+        thread.interrupt();
         thread = null;
     }
 
