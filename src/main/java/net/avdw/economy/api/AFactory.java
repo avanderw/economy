@@ -6,34 +6,34 @@ import java.util.List;
 import java.util.concurrent.BlockingQueue;
 import org.pmw.tinylog.Logger;
 
-public abstract class AFactory<I, O> extends AThread
+public abstract class AFactory<I, O extends I> extends AThread
 {
 
-    private final List<BlockingQueue<Container<I>>> inputs;
-    private final List<BlockingQueue<Container<O>>> outputs;
+    private final List<BlockingQueue<I>> inputs;
+    private final List<BlockingQueue<O>> outputs;
 
-    public AFactory(BlockingQueue<Container<I>> input, BlockingQueue<Container<O>>... outputs)
+    public AFactory(BlockingQueue<I> input, BlockingQueue<O>... outputs)
     {
         this.inputs = new ArrayList();
         this.inputs.add(input);
         this.outputs = Arrays.asList(outputs);
     }
 
-    public AFactory(BlockingQueue<Container<I>> input, List<BlockingQueue<Container<O>>> outputs)
+    public AFactory(BlockingQueue<I> input, List<BlockingQueue<O>> outputs)
     {
         this.inputs = new ArrayList();
         this.inputs.add(input);
         this.outputs = outputs;
     }
 
-    public AFactory(List<BlockingQueue<Container<I>>> inputs, BlockingQueue<Container<O>> output)
+    public AFactory(List<BlockingQueue<I>> inputs, BlockingQueue<O> output)
     {
         this.inputs = inputs;
         this.outputs = new ArrayList();
         this.outputs.add(output);
     }
 
-    public AFactory(List<BlockingQueue<Container<I>>> inputs, List<BlockingQueue<Container<O>>> outputs)
+    public AFactory(List<BlockingQueue<I>> inputs, List<BlockingQueue<O>> outputs)
     {
         this.inputs = inputs;
         this.outputs = outputs;
@@ -51,19 +51,13 @@ public abstract class AFactory<I, O> extends AThread
             {
                 try
                 {
-                    Container<I> inputContainer = input.take();
-                    inputContainer.stamp(this.getClass().getSimpleName());
-                    consume(inputContainer.unpack());
+                    consume(input.take());
 
                     O good = produce();
 
-                    for (BlockingQueue<Container<O>> output : outputs)
+                    for (BlockingQueue<O> output : outputs)
                     {
-                        Container<O> container = new Container(inputContainer);
-                        container.pack(good);
-                        container.stamp(this.getClass().getSimpleName());
-
-                        output.put(container);
+                        output.put(good);
                     }
                 } catch (InterruptedException ex)
                 {

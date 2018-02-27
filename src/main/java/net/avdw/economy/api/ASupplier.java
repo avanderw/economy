@@ -8,9 +8,9 @@ import org.pmw.tinylog.Logger;
 public abstract class ASupplier<T> extends AThread
 {
 
-    private final List<BlockingQueue<Container>> outputs;
+    private final List<BlockingQueue> outputs;
 
-    public ASupplier(BlockingQueue<Container>... outputs)
+    public ASupplier(BlockingQueue... outputs)
     {
         this.outputs = Arrays.asList(outputs);
     }
@@ -25,13 +25,11 @@ public abstract class ASupplier<T> extends AThread
         {
             try
             {
-                Container container = new Container();
-                container.pack(produce());
-                container.stamp(this.getClass().getSimpleName());
+                T good = produce();
 
-                for (BlockingQueue<Container> output : outputs)
+                for (BlockingQueue output : outputs)
                 {
-                    output.put(container);
+                    output.put(good);
                 }
             } catch (InterruptedException ex)
             {

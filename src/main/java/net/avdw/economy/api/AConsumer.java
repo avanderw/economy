@@ -7,15 +7,15 @@ import org.pmw.tinylog.Logger;
 
 public abstract class AConsumer<I> extends AThread
     {
-        private final List<BlockingQueue<Container<I>>> inputs;
+        private final List<BlockingQueue<I>> inputs;
 
-        public AConsumer(BlockingQueue<Container<I>> input)
+        public AConsumer(BlockingQueue<I> input)
         {
             this.inputs = new ArrayList();
             this.inputs.add(input);
         }
 
-        public AConsumer(List<BlockingQueue<Container<I>>> inputs)
+        public AConsumer(List<BlockingQueue<I>> inputs)
         {
             this.inputs = inputs;
         }
@@ -32,10 +32,7 @@ public abstract class AConsumer<I> extends AThread
                 {
                     try
                     {
-                        Container<I> container = input.take();
-                        container.stamp(this.getClass().getSimpleName());
-                        consume(container.unpack());
-                        Logger.trace(container);
+                        consume(input.take());
                     } catch (InterruptedException ex)
                     {
                         Logger.warn(ex);
