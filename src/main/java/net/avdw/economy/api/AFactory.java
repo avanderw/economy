@@ -66,7 +66,7 @@ public abstract class AFactory<I extends AGood, O extends AGood> extends AThread
             });
         }
 
-        Logger.info(String.format("stopped"));
+        Logger.debug(String.format("stopped"));
     }
 
     public abstract void consume(I good);

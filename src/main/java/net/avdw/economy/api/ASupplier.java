@@ -36,7 +36,7 @@ public abstract class ASupplier<T> extends AThread
                 Logger.warn(ex);
             }
         }
-        Logger.info(String.format("stopped"));
+        Logger.debug(String.format("stopped"));
     }
 
     public abstract T produce();

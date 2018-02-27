@@ -39,7 +39,7 @@ public abstract class AConsumer<I> extends AThread
                     }
                 });
             }
-            Logger.info(String.format("stopped"));
+            Logger.debug(String.format("stopped"));
         }
 
         public abstract void consume(I good);
