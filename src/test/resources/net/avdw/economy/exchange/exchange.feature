@@ -1,6 +1,5 @@
 Feature: Exchange
-  As a trader
-  in order to use the exchange
+  A place to facilitate an exchange of goods
 
   Scenario: List goods
     I need to be able to list goods at a price
