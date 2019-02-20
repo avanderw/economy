@@ -34,4 +34,4 @@ Feature: Demand
 
     Given a demand is perfectly inelastic
     When the quantity changes by any amount
-    Then an error should be recorded
+    Then the price is infinite

@@ -19,7 +19,7 @@ public class DemandStepdefs implements En {
         Given("^a demand is elastic$", () -> demand = new Demand(1000L, 150));
         Given("^a demand is perfectly elastic$", () -> demand = new Demand(1000L, Integer.MAX_VALUE));
         Given("^a demand is perfectly inelastic$", () -> demand = new Demand(1000L, 0));
-        When("^the quantity changes by any amount$", () -> quantityChange = (long) (new Random().nextInt(9) + 1));
+        When("^the quantity changes by any amount$", () -> quantityChange = (long) (new Random().nextInt(19) + 1));
         Then("^the price remains constant$", () -> {
             Long initialPrice = calculator.calculate(demand, 100L);
             Long priceAfterBuy = calculator.calculate(demand, 100L + quantityChange);
@@ -27,9 +27,6 @@ public class DemandStepdefs implements En {
 
             assertThat(priceAfterBuy, is(initialPrice));
             assertThat(priceAfterSell, is(initialPrice));
-        });
-        Then("^an error should be recorded$", () -> {
-            throw new UnsupportedOperationException();
         });
         Then("^the price change is equivalent to the quantity change$", () -> {
             Long initialPrice = calculator.calculate(demand, 100L);
@@ -54,6 +51,15 @@ public class DemandStepdefs implements En {
 
             assertThat(priceChange(initialPrice, priceAfterBuy), lessThan(quantityChange));
             assertThat(priceChange(initialPrice, priceAfterSell), lessThan(quantityChange));
+        });
+        Then("^the price is infinite$", () -> {
+            Long initialPrice = calculator.calculate(demand, 100L);
+            Long priceAfterBuy = calculator.calculate(demand, 100L + quantityChange);
+            Long priceAfterSell = calculator.calculate(demand, 100L - quantityChange);
+
+            assertThat(initialPrice, is(Long.MAX_VALUE));
+            assertThat(priceAfterBuy, is(initialPrice));
+            assertThat(priceAfterSell, is(initialPrice));
         });
     }
 
