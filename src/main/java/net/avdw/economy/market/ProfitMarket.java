@@ -4,9 +4,9 @@ import net.avdw.economy.market.api.AMarket;
 import net.avdw.economy.market.api.Good;
 
 class ProfitMarket implements AMarket {
-    private final Storage storage;
+    private final BasicStorage storage;
 
-    ProfitMarket(Storage storage) {
+    ProfitMarket(BasicStorage storage) {
         this.storage = storage;
     }
 
@@ -18,5 +18,20 @@ class ProfitMarket implements AMarket {
     @Override
     public Long getPrice(Good good) {
         throw new UnsupportedOperationException();
+    }
+
+    @Override
+    public Long getQuantity(Good good) {
+        return storage.getQuantity(good);
+    }
+
+    @Override
+    public void buyFrom(Good good, Long quantity) {
+        storage.take(good, quantity);
+    }
+
+    @Override
+    public void sellTo(Good good, Long quantity) {
+        storage.give(good, quantity);
     }
 }

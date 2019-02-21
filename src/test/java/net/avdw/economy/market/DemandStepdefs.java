@@ -19,7 +19,7 @@ public class DemandStepdefs implements En {
         Given("^a demand is elastic$", () -> demand = new Demand(1000L, 150));
         Given("^a demand is perfectly elastic$", () -> demand = new Demand(1000L, Integer.MAX_VALUE));
         Given("^a demand is perfectly inelastic$", () -> demand = new Demand(1000L, 0));
-        When("^the quantity changes by any amount$", () -> quantityChange = (long) (new Random().nextInt(19) + 1));
+        When("^the quantity changes by any amount$", () -> quantityChange = (long) (new Random().nextInt(19) + 6));
         Then("^the price remains constant$", () -> {
             Long initialPrice = calculator.calculate(demand, 100L);
             Long priceAfterBuy = calculator.calculate(demand, 100L + quantityChange);

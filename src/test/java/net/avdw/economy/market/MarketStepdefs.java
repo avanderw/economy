@@ -4,24 +4,27 @@ import cucumber.api.java8.En;
 import net.avdw.economy.market.api.AMarket;
 import net.avdw.economy.market.api.Demand;
 import net.avdw.economy.market.api.Good;
-import org.hamcrest.Matchers;
 
-import java.util.ArrayList;
-import java.util.List;
+import java.util.*;
 
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.greaterThan;
+import static org.hamcrest.Matchers.lessThan;
 
 public class MarketStepdefs implements En {
+    private static final long ORIGINAL_QUANTITY = 100L;
+    private final Random random = new Random();
+    private final Long randomQuantity = (long) (random.nextInt(8) + 2);
     private final List<AMarket> allMarkets = new ArrayList<>();
+    private final Map<AMarket, Long> originalPrices = new HashMap<>();
     private final Good good = new Good("unit-elastic", new Demand(1000, 100));
     private AMarket market;
 
     public MarketStepdefs() {
-        Given("^a demand market$", () -> market = new DemandMarket(new Storage(), new DemandPriceCalculator()));
+        Given("^a demand market$", () -> market = new DemandMarket(new BasicStorage(), new DemandPriceCalculator()));
         Given("^all the markets$", () -> {
-            allMarkets.add(new BasicMarket(new Storage()));
-            allMarkets.add(new DemandMarket(new Storage(), new DemandPriceCalculator()));
+            allMarkets.add(new BasicMarket(new BasicStorage()));
+            allMarkets.add(new DemandMarket(new BasicStorage(), new DemandPriceCalculator()));
 //            allMarkets.add(new ProfitMarket(new Storage()));
 //            allMarkets.add(new TaxedMarket(new Storage()));
         });
@@ -34,19 +37,29 @@ public class MarketStepdefs implements En {
         Given("^a market with a ledger that has a positive balance$", () -> {
             throw new UnsupportedOperationException();
         });
-        And("^I register a unit-elastic good for trade$", () -> market.register(good, 100L));
+        And("^I register a unit-elastic good for trade$", () -> market.register(good, ORIGINAL_QUANTITY));
         And("^the market price should increase$", () -> {
             throw new UnsupportedOperationException();
         });
         And("^the market price should decrease$", () -> {
             throw new UnsupportedOperationException();
         });
-        And("^all the markets price should increase$", () -> {
-            throw new UnsupportedOperationException();
-        });
-        And("^all the markets price should decrease$", () -> {
-            throw new UnsupportedOperationException();
-        });
+        And("^all the markets price, except basic, should increase$", () ->
+                allMarkets.forEach(m -> {
+                    Long currentPrice = m.getPrice(good);
+                    Long originalPrice = originalPrices.get(m);
+                    if (!(m instanceof BasicMarket)) {
+                        assertThat(currentPrice, greaterThan(originalPrice));
+                    }
+                }));
+        And("^all the markets price, except basic, should decrease$", () ->
+                allMarkets.forEach(m -> {
+                    Long currentPrice = m.getPrice(good);
+                    Long originalPrice = originalPrices.get(m);
+                    if (!(m instanceof BasicMarket)) {
+                        assertThat(currentPrice, lessThan(originalPrice));
+                    }
+                }));
         And("^the running balance will decrease$", () -> {
             throw new UnsupportedOperationException();
         });
@@ -56,25 +69,16 @@ public class MarketStepdefs implements En {
         When("^I cost a bulk sale$", () -> {
             throw new UnsupportedOperationException();
         });
-        When("^I purchase one good from the market$", () -> {
-            throw new UnsupportedOperationException();
-        });
-        When("^I sell one good to the market$", () -> {
-            throw new UnsupportedOperationException();
-        });
-        When("^I purchase more than one of the good from the market$", () -> {
-            throw new UnsupportedOperationException();
-        });
-        When("^I sell more than one of the good to the market$", () -> {
-            throw new UnsupportedOperationException();
-        });
-        When("^I purchase one good from all the markets$", () -> {
-            throw new UnsupportedOperationException();
-        });
-        When("^I register a unit-elastic good for trade on all the markets$", () -> allMarkets.forEach(m -> m.register(good, 100L)));
-        When("^I sell one good to all the markets$", () -> {
-            throw new UnsupportedOperationException();
-        });
+        When("^I purchase one good from the market$", () -> market.buyFrom(good, 1L));
+        When("^I sell one good to the market$", () -> market.sellTo(good, 1L));
+        When("^I purchase more than one of the good from the market$", () -> allMarkets.forEach(m -> m.buyFrom(good, randomQuantity)));
+        When("^I sell more than one of the good to the market$", () -> allMarkets.forEach(m -> m.sellTo(good, randomQuantity)));
+        When("^I purchase one good from all the markets$", () -> allMarkets.forEach(m -> m.buyFrom(good, 1L)));
+        When("^I register a unit-elastic good for trade on all the markets$", () -> allMarkets.forEach(m -> {
+            m.register(good, ORIGINAL_QUANTITY);
+            originalPrices.putIfAbsent(m, m.getPrice(good));
+        }));
+        When("^I sell one good to all the markets$", () -> allMarkets.forEach(m -> m.sellTo(good, 1L)));
         When("^I try to sell it goods$", () -> {
             throw new UnsupportedOperationException();
         });
@@ -100,12 +104,8 @@ public class MarketStepdefs implements En {
             throw new UnsupportedOperationException();
         });
         Then("^all the markets should have a current price for the good$", () -> allMarkets.forEach(m -> assertThat(m.getPrice(good), greaterThan(0L))));
-        Then("^all the markets quantity should decrease$", () -> {
-            throw new UnsupportedOperationException();
-        });
-        Then("^all the markets quantity should increase$", () -> {
-            throw new UnsupportedOperationException();
-        });
+        Then("^all the markets quantity should decrease$", () -> allMarkets.forEach(m -> assertThat(m.getQuantity(good), lessThan(ORIGINAL_QUANTITY))));
+        Then("^all the markets quantity should increase$", () -> allMarkets.forEach(m -> assertThat(m.getQuantity(good), greaterThan(ORIGINAL_QUANTITY))));
         Then("^it will be able to purchase them$", () -> {
             throw new UnsupportedOperationException();
         });

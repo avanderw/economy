@@ -1,12 +1,13 @@
 package net.avdw.economy.market;
 
 import net.avdw.economy.market.api.AMarket;
+import net.avdw.economy.market.api.AStorage;
 import net.avdw.economy.market.api.Good;
 
 class BasicMarket implements AMarket {
-    private final Storage storage;
+    private final AStorage storage;
 
-    BasicMarket(Storage storage) {
+    BasicMarket(AStorage storage) {
         this.storage = storage;
     }
 
@@ -18,5 +19,20 @@ class BasicMarket implements AMarket {
     @Override
     public Long getPrice(Good good) {
         return good.getDemand().getZeroPrice();
+    }
+
+    @Override
+    public Long getQuantity(Good good) {
+        return storage.getQuantity(good);
+    }
+
+    @Override
+    public void buyFrom(Good good, Long quantity) {
+        storage.take(good, quantity);
+    }
+
+    @Override
+    public void sellTo(Good good, Long quantity) {
+        storage.give(good, quantity);
     }
 }

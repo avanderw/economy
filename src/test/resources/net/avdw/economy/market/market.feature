@@ -15,7 +15,7 @@ Feature: Market
     And I register a unit-elastic good for trade on all the markets
     When I purchase one good from all the markets
     Then all the markets quantity should decrease
-    And all the markets price should increase
+    And all the markets price, except basic, should increase
 
   Scenario: Sell a good
   The market must be able to sell goods
@@ -24,7 +24,7 @@ Feature: Market
     And I register a unit-elastic good for trade on all the markets
     When I sell one good to all the markets
     Then all the markets quantity should increase
-    And all the markets price should decrease
+    And all the markets price, except basic, should decrease
 
   Scenario: Cost a demand adjusted bulk purchase
     The market must be able to estimate a bulk purchase

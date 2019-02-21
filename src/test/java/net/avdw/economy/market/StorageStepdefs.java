@@ -13,11 +13,11 @@ import static org.hamcrest.Matchers.greaterThan;
 public class StorageStepdefs implements En {
     private final Random random = new Random();
     private final Good good = new Good("unit-elastic", new Demand(1000, 100));
-    private Storage storage;
+    private BasicStorage storage;
     private Long quantity;
 
     public StorageStepdefs() {
-        Given("^a storage$", () -> storage = new Storage());
+        Given("^a storage$", () -> storage = new BasicStorage());
         When("^I store a good$", () -> storage.store(good, 100L));
         When("^I take any quantity of the good$", () -> {
             quantity = (long) (random.nextInt(9) + 1);
