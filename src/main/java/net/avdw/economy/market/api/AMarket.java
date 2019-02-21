@@ -2,4 +2,5 @@ package net.avdw.economy.market.api;
 
 public interface AMarket {
     void register(Good good, Long quantity);
+    Long getPrice(Good good);
 }

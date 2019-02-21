@@ -9,7 +9,7 @@ import static org.hamcrest.Matchers.*;
 import static org.junit.Assert.assertThat;
 
 public class DemandStepdefs implements En {
-    private static final PriceCalculator calculator = new PriceCalculator();
+    private static final DemandPriceCalculator calculator = new DemandPriceCalculator();
     private Long quantityChange;
     private Demand demand;
 

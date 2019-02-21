@@ -2,7 +2,7 @@ package net.avdw.economy.market;
 
 import net.avdw.economy.market.api.Demand;
 
-class PriceCalculator {
+class DemandPriceCalculator {
     Long calculate(Demand demand, Long quantity) {
         if (demand.getElasticity() == 0)
             return Long.MAX_VALUE;
