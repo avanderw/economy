@@ -25,6 +25,15 @@ public class MarketStepdefs implements En {
 //            allMarkets.add(new ProfitMarket(new Storage()));
 //            allMarkets.add(new TaxedMarket(new Storage()));
         });
+        Given("^a market with no ledger$", () -> {
+            throw new UnsupportedOperationException();
+        });
+        Given("^a market with a ledger that has no balance$", () -> {
+            throw new UnsupportedOperationException();
+        });
+        Given("^a market with a ledger that has a positive balance$", () -> {
+            throw new UnsupportedOperationException();
+        });
         And("^I register a unit-elastic good for trade$", () -> market.register(good, 100L));
         And("^the market price should increase$", () -> {
             throw new UnsupportedOperationException();
@@ -36,6 +45,9 @@ public class MarketStepdefs implements En {
             throw new UnsupportedOperationException();
         });
         And("^all the markets price should decrease$", () -> {
+            throw new UnsupportedOperationException();
+        });
+        And("^the running balance will decrease$", () -> {
             throw new UnsupportedOperationException();
         });
         When("^I cost a bulk purchase$", () -> {
@@ -61,6 +73,9 @@ public class MarketStepdefs implements En {
         });
         When("^I register a unit-elastic good for trade on all the markets$", () -> allMarkets.forEach(m -> m.register(good, 100L)));
         When("^I sell one good to all the markets$", () -> {
+            throw new UnsupportedOperationException();
+        });
+        When("^I try to sell it goods$", () -> {
             throw new UnsupportedOperationException();
         });
         Then("^the current price difference should be less than the quantity x original price$", () -> {
@@ -89,6 +104,12 @@ public class MarketStepdefs implements En {
             throw new UnsupportedOperationException();
         });
         Then("^all the markets quantity should increase$", () -> {
+            throw new UnsupportedOperationException();
+        });
+        Then("^it will be able to purchase them$", () -> {
+            throw new UnsupportedOperationException();
+        });
+        Then("^it will not be able to purchase them$", () -> {
             throw new UnsupportedOperationException();
         });
     }

@@ -58,5 +58,27 @@ Feature: Market
     When I sell more than one of the good to the market
     Then the current price difference should be less than the quantity x original price
 
+  Scenario: Market with no ledger
+    A market with no ledger will always be able to transact
+
+    Given a market with no ledger
+    When I try to sell it goods
+    Then it will be able to purchase them
+
+  Scenario: Market with an empty ledger
+    If the market has a ledger then it has restrictions
+
+    Given a market with a ledger that has no balance
+    When I try to sell it goods
+    Then it will not be able to purchase them
+
+  Scenario: Market with a full ledger
+    If the market has a ledger with money in it
+
+    Given a market with a ledger that has a positive balance
+    When I try to sell it goods
+    Then it will be able to purchase them
+    And the running balance will decrease
+
 
 
