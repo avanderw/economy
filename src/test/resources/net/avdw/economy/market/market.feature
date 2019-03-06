@@ -32,7 +32,8 @@ Feature: Market
     Given a demand market
     And I register a unit-elastic good for trade
     When I cost a bulk purchase
-    Then the total price should be more than a the quantity x current price
+    Then the bulk price should be more than a the purchased quantity x current price
+    And the quantity in the market should not change
 
   Scenario: Cost a demand adjusted bulk sale
     The market must be able to estimate a bulk sale
@@ -40,7 +41,8 @@ Feature: Market
     Given a demand market
     And I register a unit-elastic good for trade
     When I cost a bulk sale
-    Then the total price should be less than the quantity x current price
+    Then the bulk price should be less than the sold quantity x current price
+    And the quantity in the market should not change
 
   Scenario: Demand adjusted bulk purchase
     The market must respond to change in quantity

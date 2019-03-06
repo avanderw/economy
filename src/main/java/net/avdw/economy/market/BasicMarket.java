@@ -27,6 +27,16 @@ class BasicMarket implements AMarket {
     }
 
     @Override
+    public Long costBulkPurchase(Good good, Long quantity) {
+        throw new UnsupportedOperationException();
+    }
+
+    @Override
+    public Long costBulkSale(Good good, Long quantity) {
+        throw new UnsupportedOperationException();
+    }
+
+    @Override
     public void buyFrom(Good good, Long quantity) {
         storage.take(good, quantity);
     }

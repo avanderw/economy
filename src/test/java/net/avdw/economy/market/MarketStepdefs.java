@@ -8,16 +8,18 @@ import net.avdw.economy.market.api.Good;
 import java.util.*;
 
 import static org.hamcrest.MatcherAssert.assertThat;
-import static org.hamcrest.Matchers.greaterThan;
-import static org.hamcrest.Matchers.lessThan;
+import static org.hamcrest.Matchers.*;
 
 public class MarketStepdefs implements En {
     private static final long ORIGINAL_QUANTITY = 100L;
+    private static final long BULK_QUANTITY = 10L;
     private final Random random = new Random();
     private final Long randomQuantity = (long) (random.nextInt(8) + 2);
     private final List<AMarket> allMarkets = new ArrayList<>();
     private final Map<AMarket, Long> originalPrices = new HashMap<>();
     private final Good good = new Good("unit-elastic", new Demand(1000, 100));
+    private Long initialQuantity;
+    private Long bulkPrice;
     private AMarket market;
 
     public MarketStepdefs() {
@@ -64,10 +66,12 @@ public class MarketStepdefs implements En {
             throw new UnsupportedOperationException();
         });
         When("^I cost a bulk purchase$", () -> {
-            throw new UnsupportedOperationException();
+            initialQuantity = market.getQuantity(good);
+            bulkPrice = market.costBulkPurchase(good, BULK_QUANTITY);
         });
         When("^I cost a bulk sale$", () -> {
-            throw new UnsupportedOperationException();
+            initialQuantity = market.getQuantity(good);
+            bulkPrice = market.costBulkSale(good, BULK_QUANTITY);
         });
         When("^I purchase one good from the market$", () -> market.buyFrom(good, 1L));
         When("^I sell one good to the market$", () -> market.sellTo(good, 1L));
@@ -94,15 +98,11 @@ public class MarketStepdefs implements En {
         Then("^the market quantity should decrease$", () -> {
             throw new UnsupportedOperationException();
         });
-        Then("^the total price should be less than the quantity x current price$", () -> {
-            throw new UnsupportedOperationException();
-        });
+        Then("^the bulk price should be less than the sold quantity x current price$", () -> assertThat(bulkPrice, lessThan(BULK_QUANTITY * market.getPrice(good))));
         Then("^the market should have a current price for the good$", () -> {
             throw new UnsupportedOperationException();
         });
-        Then("^the total price should be more than a the quantity x current price$", () -> {
-            throw new UnsupportedOperationException();
-        });
+        Then("^the bulk price should be more than a the purchased quantity x current price$", () -> assertThat(bulkPrice, greaterThan(BULK_QUANTITY * market.getPrice(good))));
         Then("^all the markets should have a current price for the good$", () -> allMarkets.forEach(m -> assertThat(m.getPrice(good), greaterThan(0L))));
         Then("^all the markets quantity should decrease$", () -> allMarkets.forEach(m -> assertThat(m.getQuantity(good), lessThan(ORIGINAL_QUANTITY))));
         Then("^all the markets quantity should increase$", () -> allMarkets.forEach(m -> assertThat(m.getQuantity(good), greaterThan(ORIGINAL_QUANTITY))));
@@ -112,5 +112,6 @@ public class MarketStepdefs implements En {
         Then("^it will not be able to purchase them$", () -> {
             throw new UnsupportedOperationException();
         });
+        And("^the quantity in the market should not change$", () -> assertThat(market.getQuantity(good), equalTo(initialQuantity)));
     }
 }

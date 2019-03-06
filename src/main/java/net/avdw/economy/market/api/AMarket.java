@@ -6,4 +6,6 @@ public interface AMarket {
     void sellTo(Good good, Long quantity);
     Long getPrice(Good good);
     Long getQuantity(Good good);
+    Long costBulkPurchase(Good good, Long quantity);
+    Long costBulkSale(Good good, Long quantity);
 }
