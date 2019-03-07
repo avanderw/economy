@@ -30,7 +30,7 @@ public class MarketStepdefs implements En {
 //            allMarkets.add(new TaxedMarket(new Storage()));
         });
         Given("^a market with no ledger$", () -> {
-            throw new UnsupportedOperationException();
+            market = new BasicMarket(new BasicStorage());
         });
         Given("^a market with a ledger that has no balance$", () -> {
             throw new UnsupportedOperationException();
