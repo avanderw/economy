@@ -11,7 +11,7 @@ Scenario: Withdraw from full ledger
   When I withdraw from the ledger
   Then the ledger running balance will decrease
 
-Scenario: Decrease with empty ledger
+Scenario: Withdraw with empty ledger
   Given an empty ledger
   When I withdraw from the ledger
   Then the ledger will not allow the withdrawal
