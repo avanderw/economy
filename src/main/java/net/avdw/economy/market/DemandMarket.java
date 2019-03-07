@@ -11,6 +11,11 @@ class DemandMarket implements AMarket {
     private final AStorage storage;
     private final DemandPriceCalculator calculator;
 
+    DemandMarket(AStorage storage) {
+        this.storage = storage;
+        this.calculator = new DemandPriceCalculator();
+    }
+
     DemandMarket(AStorage storage, DemandPriceCalculator calculator) {
         this.storage = storage;
         this.calculator = calculator;

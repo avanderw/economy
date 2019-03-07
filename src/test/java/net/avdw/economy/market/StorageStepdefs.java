@@ -11,6 +11,7 @@ import static org.hamcrest.Matchers.equalTo;
 import static org.hamcrest.Matchers.greaterThan;
 
 public class StorageStepdefs implements En {
+    private static final long ORIGINAL_QUANTITY = 100L;
     private final Random random = new Random();
     private final Good good = new Good("unit-elastic", new Demand(1000, 100));
     private BasicStorage storage;
@@ -18,7 +19,7 @@ public class StorageStepdefs implements En {
 
     public StorageStepdefs() {
         Given("^a storage$", () -> storage = new BasicStorage());
-        When("^I store a good$", () -> storage.store(good, 100L));
+        When("^I store a good$", () -> storage.store(good, ORIGINAL_QUANTITY));
         When("^I take any quantity of the good$", () -> {
             quantity = (long) (random.nextInt(9) + 1);
             storage.take(good, quantity);
@@ -28,7 +29,7 @@ public class StorageStepdefs implements En {
             storage.give(good, quantity);
         });
         Then("^I can retrieve the quantity of the good$", () -> assertThat(storage.getQuantity(good), greaterThan(0L)));
-        Then("^the storage is reduced by the quantity taken$", () -> assertThat(storage.getQuantity(good), equalTo(100L - quantity)));
-        Then("^the storage is increased by the quantity given$", () -> assertThat(storage.getQuantity(good), equalTo(100L + quantity)));
+        Then("^the storage is reduced by the quantity taken$", () -> assertThat(storage.getQuantity(good), equalTo(ORIGINAL_QUANTITY - quantity)));
+        Then("^the storage is increased by the quantity given$", () -> assertThat(storage.getQuantity(good), equalTo(ORIGINAL_QUANTITY + quantity)));
     }
 }

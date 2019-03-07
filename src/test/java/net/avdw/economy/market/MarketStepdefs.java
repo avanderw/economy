@@ -18,12 +18,11 @@ public class MarketStepdefs implements En {
     private final List<AMarket> allMarkets = new ArrayList<>();
     private final Map<AMarket, Long> originalPrices = new HashMap<>();
     private final Good good = new Good("unit-elastic", new Demand(1000, 100));
-    private Long initialQuantity;
     private Long bulkPrice;
     private AMarket market;
 
     public MarketStepdefs() {
-        Given("^a demand market$", () -> market = new DemandMarket(new BasicStorage(), new DemandPriceCalculator()));
+        Given("^a demand market$", () -> market = new DemandMarket(new BasicStorage()));
         Given("^all the markets$", () -> {
             allMarkets.add(new BasicMarket(new BasicStorage()));
             allMarkets.add(new DemandMarket(new BasicStorage(), new DemandPriceCalculator()));
@@ -62,34 +61,26 @@ public class MarketStepdefs implements En {
                         assertThat(currentPrice, lessThan(originalPrice));
                     }
                 }));
-        And("^the running balance will decrease$", () -> {
+        And("^the market running balance will decrease$", () -> {
             throw new UnsupportedOperationException();
         });
         When("^I cost a bulk purchase$", () -> {
-            initialQuantity = market.getQuantity(good);
             bulkPrice = market.costBulkPurchase(good, BULK_QUANTITY);
         });
         When("^I cost a bulk sale$", () -> {
-            initialQuantity = market.getQuantity(good);
             bulkPrice = market.costBulkSale(good, BULK_QUANTITY);
         });
         When("^I purchase one good from the market$", () -> market.buyFrom(good, 1L));
         When("^I sell one good to the market$", () -> market.sellTo(good, 1L));
-        When("^I purchase more than one of the good from the market$", () -> allMarkets.forEach(m -> m.buyFrom(good, randomQuantity)));
-        When("^I sell more than one of the good to the market$", () -> allMarkets.forEach(m -> m.sellTo(good, randomQuantity)));
+        When("^I purchase more than one of the good from the market$", () -> market.buyFrom(good, randomQuantity));
+        When("^I sell more than one of the good to the market$", () -> market.sellTo(good, randomQuantity));
         When("^I purchase one good from all the markets$", () -> allMarkets.forEach(m -> m.buyFrom(good, 1L)));
         When("^I register a unit-elastic good for trade on all the markets$", () -> allMarkets.forEach(m -> {
             m.register(good, ORIGINAL_QUANTITY);
             originalPrices.putIfAbsent(m, m.getPrice(good));
         }));
         When("^I sell one good to all the markets$", () -> allMarkets.forEach(m -> m.sellTo(good, 1L)));
-        When("^I try to sell it goods$", () -> {
-            throw new UnsupportedOperationException();
-        });
-        Then("^the current price difference should be less than the quantity x original price$", () -> {
-            throw new UnsupportedOperationException();
-        });
-        Then("^the current price difference should be more than the quantity x original price$", () -> {
+        When("^I try to sell the market goods$", () -> {
             throw new UnsupportedOperationException();
         });
         Then("^the market quantity should increase$", () -> {
@@ -106,12 +97,14 @@ public class MarketStepdefs implements En {
         Then("^all the markets should have a current price for the good$", () -> allMarkets.forEach(m -> assertThat(m.getPrice(good), greaterThan(0L))));
         Then("^all the markets quantity should decrease$", () -> allMarkets.forEach(m -> assertThat(m.getQuantity(good), lessThan(ORIGINAL_QUANTITY))));
         Then("^all the markets quantity should increase$", () -> allMarkets.forEach(m -> assertThat(m.getQuantity(good), greaterThan(ORIGINAL_QUANTITY))));
-        Then("^it will be able to purchase them$", () -> {
+        Then("^the market will be able to purchase them$", () -> {
             throw new UnsupportedOperationException();
         });
-        Then("^it will not be able to purchase them$", () -> {
+        Then("^the market will not be able to purchase them$", () -> {
             throw new UnsupportedOperationException();
         });
-        And("^the quantity in the market should not change$", () -> assertThat(market.getQuantity(good), equalTo(initialQuantity)));
+        And("^the quantity in the market should not change$", () -> assertThat(market.getQuantity(good), equalTo(ORIGINAL_QUANTITY)));
+        Then("^the quantity in the market should reduce by more than one$", () -> assertThat(market.getQuantity(good), lessThan(ORIGINAL_QUANTITY-1)));
+        Then("^the quantity in the market should increase by more than one$", () -> assertThat(market.getQuantity(good), greaterThan(ORIGINAL_QUANTITY+1)));
     }
 }

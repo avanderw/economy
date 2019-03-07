@@ -50,7 +50,7 @@ Feature: Market
     Given a demand market
     And I register a unit-elastic good for trade
     When I purchase more than one of the good from the market
-    Then the current price difference should be more than the quantity x original price
+    Then the quantity in the market should reduce by more than one
 
   Scenario: Demand adjusted bulk sale
     The market must respond to change in quantity
@@ -58,29 +58,29 @@ Feature: Market
     Given a demand market
     And I register a unit-elastic good for trade
     When I sell more than one of the good to the market
-    Then the current price difference should be less than the quantity x original price
+    Then the quantity in the market should increase by more than one
 
   Scenario: Market with no ledger
     A market with no ledger will always be able to transact
 
     Given a market with no ledger
-    When I try to sell it goods
-    Then it will be able to purchase them
+    When I try to sell the market goods
+    Then the market will be able to purchase them
 
   Scenario: Market with an empty ledger
-    If the market has a ledger then it has restrictions
+    If the market has an empty ledger then it has restrictions
 
     Given a market with a ledger that has no balance
-    When I try to sell it goods
-    Then it will not be able to purchase them
+    When I try to sell the market goods
+    Then the market will not be able to purchase them
 
   Scenario: Market with a full ledger
     If the market has a ledger with money in it
 
     Given a market with a ledger that has a positive balance
-    When I try to sell it goods
-    Then it will be able to purchase them
-    And the running balance will decrease
+    When I try to sell the market goods
+    Then the market will be able to purchase them
+    And the market running balance will decrease
 
 
 
