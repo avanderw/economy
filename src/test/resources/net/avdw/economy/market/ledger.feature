@@ -7,17 +7,17 @@ Scenario: Deposit with any ledger
   Then the ledger running balance will increase
 
 Scenario: Withdraw from full ledger
-  Given a full ledger
+  Given any full ledger
   When I withdraw from the ledger
   Then the ledger running balance will decrease
 
 Scenario: Withdraw with empty ledger
-  Given an empty ledger
+  Given an empty debit ledger
   When I withdraw from the ledger
   Then the ledger will not allow the withdrawal
 
 Scenario: Audit withdrawal
-  Given a full ledger
+  Given any full ledger
   When I withdraw from the ledger
   Then the ledger will audit the withdrawal
 
