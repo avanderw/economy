@@ -16,6 +16,12 @@ Scenario: Withdraw with empty ledger
   When I withdraw from the ledger
   Then the ledger will not allow the withdrawal
 
+Scenario: Infinite Ledger
+  Given an empty infinite ledger
+  When I withdraw from the ledger
+  And I deposit into the ledger
+  Then the ledger will allow the transactions
+
 Scenario: Audit withdrawal
   Given any full ledger
   When I withdraw from the ledger

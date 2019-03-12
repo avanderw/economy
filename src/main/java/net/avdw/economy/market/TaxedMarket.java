@@ -36,8 +36,12 @@ class TaxedMarket implements AMarket {
     }
 
     @Override
-    public void buyFrom(Good good, Long quantity) {
-        storage.take(good, quantity);
+    public void buyFrom(Good good, Long quantity) throws MarketException {
+        try {
+            storage.take(good, quantity);
+        } catch (StorageException e) {
+            throw new MarketException();
+        }
     }
 
     @Override

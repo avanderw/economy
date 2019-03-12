@@ -1,6 +1,9 @@
 package net.avdw.economy.market;
 
-class DebitLedger {
+import net.avdw.economy.market.api.ALedger;
+import net.avdw.economy.market.api.LedgerException;
+
+class DebitLedger implements ALedger {
     private Long balance = 0L;
 
     DebitLedger(){}
@@ -9,15 +12,15 @@ class DebitLedger {
         this.balance = balance;
     }
 
-    void deposit(long amount) {
+    public void deposit(long amount) {
         balance += amount;
     }
 
-    Long queryBalance() {
+    public long queryBalance() {
         return balance;
     }
 
-    void withdraw(long amount) throws LedgerException {
+    public void withdraw(long amount) throws LedgerException {
         if (balance <  amount) {
             throw new LedgerException();
         }

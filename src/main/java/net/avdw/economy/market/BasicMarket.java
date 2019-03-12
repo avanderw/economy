@@ -1,14 +1,27 @@
 package net.avdw.economy.market;
 
+import net.avdw.economy.market.api.ALedger;
 import net.avdw.economy.market.api.AMarket;
 import net.avdw.economy.market.api.AStorage;
 import net.avdw.economy.market.api.Good;
 
 class BasicMarket implements AMarket {
     private final AStorage storage;
+    private final ALedger ledger;
 
     BasicMarket(AStorage storage) {
         this.storage = storage;
+        this.ledger = new InfiniteLedger();
+    }
+
+    BasicMarket(BasicStorage storage, ALedger ledger) {
+        this.storage = storage;
+        this.ledger = ledger;
+    }
+
+    BasicMarket(ALedger ledger) {
+        this.storage = new InfiniteStorage();
+        this.ledger = ledger;
     }
 
     @Override
@@ -37,12 +50,19 @@ class BasicMarket implements AMarket {
     }
 
     @Override
-    public void buyFrom(Good good, Long quantity) {
-        storage.take(good, quantity);
+    public void buyFrom(Good good, Long quantity) throws MarketException {
+        try {
+            storage.take(good, quantity);
+        } catch (StorageException e) {
+            throw new MarketException();
+        }
     }
 
     @Override
-    public void sellTo(Good good, Long quantity) {
+    public void sellTo(Good good, Long quantity) throws MarketException {
+        if (ledger.queryBalance() < costBulkPurchase(good, quantity)) {
+            throw new MarketException();
+        }
         storage.give(good, quantity);
     }
 }

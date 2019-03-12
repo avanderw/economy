@@ -15,13 +15,21 @@ class BasicStorage implements AStorage {
     }
 
     @Override
-    public Long getQuantity(Good good) {
+    public long getQuantity(Good good) {
         return store.get(good);
     }
 
     @Override
-    public void take(Good good, Long quantity) {
-        store.computeIfPresent(good, (k, v) -> v - quantity);
+    public void take(Good good, Long quantity) throws StorageException {
+        if (store.containsKey(good)) {
+            if (store.get(good) < quantity) {
+                throw new StorageException();
+            }
+
+            store.put(good, store.get(good) - quantity);
+        } else {
+            throw new StorageException();
+        }
     }
 
     @Override

@@ -4,6 +4,8 @@ import cucumber.api.java8.En;
 import net.avdw.economy.market.api.AMarket;
 import net.avdw.economy.market.api.Demand;
 import net.avdw.economy.market.api.Good;
+import net.avdw.economy.market.api.LedgerException;
+import org.hamcrest.core.IsInstanceOf;
 
 import java.util.*;
 
@@ -20,6 +22,7 @@ public class MarketStepdefs implements En {
     private final Good good = new Good("unit-elastic", new Demand(1000, 100));
     private Long bulkPrice;
     private AMarket market;
+    private MarketException lastException;
 
     public MarketStepdefs() {
         Given("^a demand market$", () -> market = new DemandMarket(new BasicStorage()));
@@ -33,10 +36,10 @@ public class MarketStepdefs implements En {
             market = new BasicMarket(new BasicStorage());
         });
         Given("^a market with a ledger that has no balance$", () -> {
-            throw new UnsupportedOperationException();
+            market = new BasicMarket(new BasicStorage(), new DebitLedger());
         });
         Given("^a market with a ledger that has a positive balance$", () -> {
-            throw new UnsupportedOperationException();
+            market = new BasicMarket(new DebitLedger(10000L));
         });
         And("^I register a unit-elastic good for trade$", () -> market.register(good, ORIGINAL_QUANTITY));
         And("^the market price should increase$", () -> {
@@ -74,14 +77,26 @@ public class MarketStepdefs implements En {
         When("^I sell one good to the market$", () -> market.sellTo(good, 1L));
         When("^I purchase more than one of the good from the market$", () -> market.buyFrom(good, randomQuantity));
         When("^I sell more than one of the good to the market$", () -> market.sellTo(good, randomQuantity));
-        When("^I purchase one good from all the markets$", () -> allMarkets.forEach(m -> m.buyFrom(good, 1L)));
+        When("^I purchase one good from all the markets$", () -> allMarkets.forEach(m -> {
+            try {
+                m.buyFrom(good, 1L);
+            } catch (MarketException e) {
+                lastException = e;
+            }
+        }));
         When("^I register a unit-elastic good for trade on all the markets$", () -> allMarkets.forEach(m -> {
             m.register(good, ORIGINAL_QUANTITY);
             originalPrices.putIfAbsent(m, m.getPrice(good));
         }));
-        When("^I sell one good to all the markets$", () -> allMarkets.forEach(m -> m.sellTo(good, 1L)));
+        When("^I sell one good to all the markets$", () -> allMarkets.forEach(m -> {
+            try {
+                m.sellTo(good, 1L);
+            } catch (MarketException e) {
+                lastException = e;
+            }
+        }));
         When("^I try to sell the market goods$", () -> {
-            throw new UnsupportedOperationException();
+            market.sellTo(good, BULK_QUANTITY);
         });
         Then("^the market quantity should increase$", () -> {
             throw new UnsupportedOperationException();
@@ -98,10 +113,10 @@ public class MarketStepdefs implements En {
         Then("^all the markets quantity should decrease$", () -> allMarkets.forEach(m -> assertThat(m.getQuantity(good), lessThan(ORIGINAL_QUANTITY))));
         Then("^all the markets quantity should increase$", () -> allMarkets.forEach(m -> assertThat(m.getQuantity(good), greaterThan(ORIGINAL_QUANTITY))));
         Then("^the market will be able to purchase them$", () -> {
-            throw new UnsupportedOperationException();
+            assertThat(lastException, nullValue());
         });
         Then("^the market will not be able to purchase them$", () -> {
-            throw new UnsupportedOperationException();
+            assertThat(lastException, IsInstanceOf.any(MarketException.class));
         });
         And("^the quantity in the market should not change$", () -> assertThat(market.getQuantity(good), equalTo(ORIGINAL_QUANTITY)));
         Then("^the quantity in the market should reduce by more than one$", () -> assertThat(market.getQuantity(good), lessThan(ORIGINAL_QUANTITY-1)));

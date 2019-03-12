@@ -1,20 +1,16 @@
 package net.avdw.economy.market;
 
 import cucumber.api.java8.En;
+import net.avdw.economy.market.api.ALedger;
+import net.avdw.economy.market.api.LedgerException;
 import org.hamcrest.core.IsInstanceOf;
-import org.junit.Rule;
-import org.junit.rules.ExpectedException;
 
-import static com.sun.org.apache.xerces.internal.util.PropertyState.is;
 import static org.hamcrest.MatcherAssert.assertThat;
-import static org.hamcrest.Matchers.greaterThan;
-import static org.hamcrest.Matchers.lessThan;
-import static org.junit.Assert.assertNotNull;
-import static org.junit.Assert.fail;
+import static org.hamcrest.Matchers.*;
 
 public class LedgerStepdefs implements En {
     private Long originalBalance;
-    private DebitLedger ledger;
+    private ALedger ledger;
     private LedgerException lastException;
 
     public LedgerStepdefs() {
@@ -57,5 +53,7 @@ public class LedgerStepdefs implements En {
         Then("^there will be multiple audits$", () -> {
             throw new UnsupportedOperationException();
         });
+        Given("^an empty infinite ledger$", () -> ledger = new InfiniteLedger());
+        Then("^the ledger will allow the transactions$", () -> assertThat(lastException, nullValue()));
     }
 }
