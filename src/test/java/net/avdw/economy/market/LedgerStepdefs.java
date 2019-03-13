@@ -14,19 +14,13 @@ public class LedgerStepdefs implements En {
     private LedgerException lastException;
 
     public LedgerStepdefs() {
-        Given("^any ledger$", () -> {
-            ledger = new DebitLedger();
-        });
+        Given("^any ledger$", () -> ledger = new DebitLedger());
         When("^I deposit into the ledger$", () -> {
             originalBalance = ledger.queryBalance();
             ledger.deposit(100L);
         });
-        Then("^the ledger running balance will increase$", () -> {
-            assertThat(ledger.queryBalance(), greaterThan(originalBalance));
-        });
-        Given("^any full ledger$", () -> {
-            ledger = new DebitLedger(100L);
-        });
+        Then("^the ledger running balance will increase$", () -> assertThat(ledger.queryBalance(), greaterThan(originalBalance)));
+        Given("^any full ledger$", () -> ledger = new DebitLedger(100L));
         When("^I withdraw from the ledger$", () -> {
             originalBalance = ledger.queryBalance();
             try {
@@ -35,24 +29,12 @@ public class LedgerStepdefs implements En {
                 lastException = e;
             }
         });
-        Then("^the ledger running balance will decrease$", () -> {
-            assertThat(ledger.queryBalance(), lessThan(originalBalance));
-        });
-        Given("^an empty debit ledger$", () -> {
-            ledger = new DebitLedger();
-        });
-        Then("^the ledger will not allow the withdrawal$", () -> {
-            assertThat(lastException, IsInstanceOf.any(LedgerException.class));
-        });
-        Then("^the ledger will audit the withdrawal$", () -> {
-            throw new UnsupportedOperationException();
-        });
-        Then("^the ledger will audit the deposit$", () -> {
-            throw new UnsupportedOperationException();
-        });
-        Then("^there will be multiple audits$", () -> {
-            throw new UnsupportedOperationException();
-        });
+        Then("^the ledger running balance will decrease$", () -> assertThat(ledger.queryBalance(), lessThan(originalBalance)));
+        Given("^an empty debit ledger$", () -> ledger = new DebitLedger());
+        Then("^the ledger will not allow the withdrawal$", () -> assertThat(lastException, IsInstanceOf.any(LedgerException.class)));
+        Then("^the ledger will audit the withdrawal$", () -> assertThat(ledger.getAudits(), hasSize(1)));
+        Then("^the ledger will audit the deposit$", () -> assertThat(ledger.getAudits(), hasSize(1)));
+        Then("^there will be multiple audits$", () -> assertThat(ledger.getAudits().size(), greaterThan(1)));
         Given("^an empty infinite ledger$", () -> ledger = new InfiniteLedger());
         Then("^the ledger will allow the transactions$", () -> assertThat(lastException, nullValue()));
     }

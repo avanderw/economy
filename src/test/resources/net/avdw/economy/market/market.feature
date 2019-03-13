@@ -80,7 +80,6 @@ Feature: Market
     Given a market with a ledger that has a positive balance
     When I try to sell the market goods
     Then the market will be able to purchase them
-    And the market running balance will decrease
 
 
 

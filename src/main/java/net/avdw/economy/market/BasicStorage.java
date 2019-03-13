@@ -2,6 +2,7 @@ package net.avdw.economy.market;
 
 import net.avdw.economy.market.api.AStorage;
 import net.avdw.economy.market.api.Good;
+import net.avdw.economy.market.api.StorageException;
 
 import java.util.HashMap;
 import java.util.Map;

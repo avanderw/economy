@@ -1,9 +1,6 @@
 package net.avdw.economy.market;
 
-import net.avdw.economy.market.api.ALedger;
-import net.avdw.economy.market.api.AMarket;
-import net.avdw.economy.market.api.AStorage;
-import net.avdw.economy.market.api.Good;
+import net.avdw.economy.market.api.*;
 
 class BasicMarket implements AMarket {
     private final AStorage storage;
@@ -41,7 +38,7 @@ class BasicMarket implements AMarket {
 
     @Override
     public Long costBulkPurchase(Good good, Long quantity) {
-        throw new UnsupportedOperationException();
+        return getPrice(good) * quantity;
     }
 
     @Override

@@ -1,8 +1,6 @@
 package net.avdw.economy.market;
 
-import net.avdw.economy.market.api.AMarket;
-import net.avdw.economy.market.api.AStorage;
-import net.avdw.economy.market.api.Good;
+import net.avdw.economy.market.api.*;
 
 import java.util.concurrent.atomic.AtomicReference;
 import java.util.stream.IntStream;

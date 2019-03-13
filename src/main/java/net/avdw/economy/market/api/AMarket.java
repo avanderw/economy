@@ -1,7 +1,5 @@
 package net.avdw.economy.market.api;
 
-import net.avdw.economy.market.MarketException;
-
 public interface AMarket {
     void register(Good good, Long quantity);
     void buyFrom(Good good, Long quantity) throws MarketException;

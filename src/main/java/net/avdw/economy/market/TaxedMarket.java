@@ -2,6 +2,8 @@ package net.avdw.economy.market;
 
 import net.avdw.economy.market.api.AMarket;
 import net.avdw.economy.market.api.Good;
+import net.avdw.economy.market.api.MarketException;
+import net.avdw.economy.market.api.StorageException;
 
 class TaxedMarket implements AMarket {
     private final BasicStorage storage;

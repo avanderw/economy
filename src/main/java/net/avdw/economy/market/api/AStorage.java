@@ -1,7 +1,5 @@
 package net.avdw.economy.market.api;
 
-import net.avdw.economy.market.StorageException;
-
 public interface AStorage {
     void store(Good good, Long quantity);
     long getQuantity(Good good);
