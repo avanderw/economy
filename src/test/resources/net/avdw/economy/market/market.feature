@@ -81,5 +81,23 @@ Feature: Market
     When I try to sell the market goods
     Then the market will be able to purchase them
 
+  Scenario: Profit market
+    The market should record a profit when making a sale
+
+    Given a profit market
+    When I sell one good to the market
+    And I purchase one good from the market
+    Then the market must record a profit
+
+  Scenario: Taxed Market
+    The market should be taxed when making a profit
+
+    Given a tax market
+    When I sell one good to the market
+    And I purchase one good from the market
+    Then the market must record the tax
+    And the profit should be the same as a profit market
+
+
 
 
