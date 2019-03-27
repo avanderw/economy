@@ -8,6 +8,15 @@ Feature: Market
     When I register a unit-elastic good for trade on all the markets
     Then all the markets should have a current price for the good
 
+  Scenario: List goods
+    The market should be able to list it's goods
+
+    Given all the markets
+    When I register a unit-elastic good for trade on all the markets
+    And I register a unit-elastic good for trade on all the markets
+    When I list the market inventory
+    Then the list should contain two goods
+
   Scenario: Purchase a good
     The market must be able to purchase goods
 

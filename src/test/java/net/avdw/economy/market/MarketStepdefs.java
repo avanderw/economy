@@ -80,6 +80,9 @@ public class MarketStepdefs implements En {
                 lastException = e;
             }
         });
+        When("^I list the market inventory$", () -> {
+
+        });
         Then("^the market quantity should increase$", () -> {
             throw new UnsupportedOperationException();
         });
