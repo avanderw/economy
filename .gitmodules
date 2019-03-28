@@ -1,0 +1,3 @@
+[submodule "submodule/cli-menu"]
+	path = submodule/cli-menu
+	url = https://github.com/avanderw/cli-menu

@@ -1,6 +1,7 @@
 package net.avdw.economy.market;
 
 import cucumber.api.java8.En;
+import net.avdw.economy.CucumberContext;
 import net.avdw.economy.market.api.AStorage;
 import net.avdw.economy.market.api.Demand;
 import net.avdw.economy.market.api.Good;
